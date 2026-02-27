@@ -22,5 +22,17 @@
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "description": "Communicate randomly",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rincy-joseph/con_vera.git"
+  },
+  "author": "Rincy Joseph",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rincy-joseph/con_vera/issues"
+  },
+  "homepage": "https://github.com/rincy-joseph/con_vera#readme"
 }

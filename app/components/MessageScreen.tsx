@@ -28,7 +28,7 @@ export const MessageScreen = () => {
             console.log("CommonMessage condition", systemAddress?.current == data.senderMAC)
 
 
-            dispatch(setMessages({...data, sender: systemAddress?.current == data.senderMAC ? 'primary' : 'others'}))
+            dispatch(setMessages({ ...data, sender: systemAddress?.current == data.senderMAC ? 'primary' : 'others' }))
         })
         return () => {
             socket.off("receive_message");
@@ -48,7 +48,7 @@ export const MessageScreen = () => {
     return <>
         <div className="flex flex-col flex-1 max-w-3xl w-full mx-auto h-screen bg-white shadow-lg overflow-hidden">
             <div className="p-4 bg-gray-100 font-bold">
-                Chat Support
+                Chat Supports
             </div>
             <div
                 ref={scrollRef}

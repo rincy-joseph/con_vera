@@ -1,21 +1,32 @@
+"use client"
 import { useDispatch, useSelector } from "react-redux"
-import { ChatBubbles } from "./ChatBubbles"
-import { RootState } from "../store"
+import { ChatBubbles } from "../../../components/ChatBubbles"
+import type { RootState } from "../../../store"
 import { io } from 'socket.io-client';
-import { useEffect, useRef } from "react"
-import { MessageInput } from "./MessageInput";
-import { setMessages } from "../redux";
+import { use, useEffect, useRef } from "react"
+import { MessageInput } from "../../../components/MessageInput";
+import { setMessages } from "../../../redux";
+import { GetMessageDetails } from './methods'
 const socket = io("http://localhost:3001")
 
-export const MessageScreen = () => {
+interface ReportType { message_eid: string }
+interface propType {
+    params: Promise<ReportType>
+}
+const MessageScreen = ({ params }: propType) => {
+    const resolveParams = use<ReportType>(params);
+    console.log("CommonMessage resolveParams", resolveParams)
+
     const dispatch = useDispatch()
     const systemAddress = useRef('')
     interface Individual {
         message: string
     }
     const { messages } = useSelector((state: RootState) => state.chat)
+    const fetchChatDetails = async (id: string) => {
+        const result = await GetMessageDetails(id);
 
-    console.log("CommonMessage message", messages)
+    }
     useEffect(() => {
         systemAddress.current = localStorage.getItem('user_uuid') || '';
         if (!systemAddress.current) {
@@ -23,17 +34,18 @@ export const MessageScreen = () => {
             localStorage.setItem('user_uuid', systemAddress.current);
         }
         socket.on('receive_message', (data) => {
-            console.log("CommonMessage systemAddress", systemAddress?.current)
-            console.log("CommonMessage data.senderMAC", data.senderMAC)
-            console.log("CommonMessage condition", systemAddress?.current == data.senderMAC)
-
-
             dispatch(setMessages({ ...data, sender: systemAddress?.current == data.senderMAC ? 'primary' : 'others' }))
         })
         return () => {
             socket.off("receive_message");
         };
     }, [])
+    console.log('CommonMessage resolveParams', resolveParams)
+    useEffect(() => {
+        if (resolveParams?.message_eid) {
+            fetchChatDetails(resolveParams?.message_eid)
+        }
+    }, [resolveParams?.message_eid])
     const handleSend = (messageIndiv: Individual) => {
         socket.emit("send_message", { ...messageIndiv, senderMAC: systemAddress.current });
     }
@@ -63,3 +75,4 @@ export const MessageScreen = () => {
         </div>
     </>
 }
+export default MessageScreen

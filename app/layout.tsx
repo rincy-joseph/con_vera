@@ -1,14 +1,18 @@
 import "./globals.css";
+import { ReduxProvider } from "./store";
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className="h-screen bg-gray-100">
-        {children}
+        <ReduxProvider>
+          {children}
+        </ReduxProvider>
       </body>
     </html>
-  )
+  );
 }
